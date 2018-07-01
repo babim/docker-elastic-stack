@@ -27,6 +27,7 @@ RUN set -x \
   	/usr/share/elasticsearch/config \
   	/usr/share/elasticsearch/config/scripts \
   	/usr/share/elasticsearch/plugins \
+	/usr/share/elasticsearch/tmp \
   ; do \
   mkdir -p "$path"; \
   done \
