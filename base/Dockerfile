@@ -6,7 +6,7 @@ RUN apk add --no-cache wget bash && cd / && wget --no-check-certificate https://
 
 RUN apk add --no-cache openjdk8-jre tini su-exec
 
-RUN apk add --no-cache libzmq bash nodejs supervisor nginx apache2-utils openssl
+RUN apk add --no-cache libzmq bash nodejs supervisor nginx apache2-utils openssl libc6-compat
 RUN mkdir -p /usr/local/lib \
 	&& ln -s /usr/lib/*/libzmq.so.3 /usr/local/lib/libzmq.so
 RUN apk add --no-cache wget ca-certificates gnupg \
