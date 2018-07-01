@@ -9,7 +9,7 @@ RUN apk add --no-cache openjdk8-jre tini su-exec
 RUN apk add --no-cache libzmq bash nodejs supervisor nginx apache2-utils openssl
 RUN mkdir -p /usr/local/lib \
 	&& ln -s /usr/lib/*/libzmq.so.3 /usr/local/lib/libzmq.so
-RUN apk add --no-cache -t .build-deps wget ca-certificates \
+RUN apk add --no-cache wget ca-certificates \
 	&& echo "Create elstack user..." \
 	&& adduser -DH -s /sbin/nologin elstack
 
