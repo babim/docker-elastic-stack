@@ -1,6 +1,6 @@
 FROM babim/elastic-stack:base
 
-ENV STACK 5.2.10
+ENV STACK 5.2.0
 
 RUN set -x \
   && cd /tmp \
