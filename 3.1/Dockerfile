@@ -10,16 +10,16 @@ RUN set -x \
   && cd /tmp \
   && echo "Download Elastic Stack ======================================================" \
   && echo "Download Elasticsearch..." \
-  && wget -q --no-check-certificate -O elasticsearch-$ELASTIC.tar.gz https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/$ELASTIC/elasticsearch-$ELASTIC.tar.gz \
+  && wget --no-check-certificate -O elasticsearch-$ELASTIC.tar.gz https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/$ELASTIC/elasticsearch-$ELASTIC.tar.gz \
   && tar -xzf elasticsearch-$ELASTIC.tar.gz \
   && mv elasticsearch-$ELASTIC /usr/share/elasticsearch \
   && echo "Download Logstash..." \
-  && wget -q --no-check-certificate -O logstash-$LOGSTASH.tar.gz \
+  && wget --no-check-certificate -O logstash-$LOGSTASH.tar.gz \
     https://download.elastic.co/logstash/logstash/logstash-$LOGSTASH.tar.gz \
   && tar -xzf logstash-$LOGSTASH.tar.gz \
   && mv logstash-$LOGSTASH /usr/share/logstash \
   && echo "Download Kibana..." \
-  && wget -q --no-check-certificate -O kibana-$KIBANA.tar.gz https://download.elastic.co/kibana/kibana/kibana-$KIBANA.tar.gz \
+  && wget --no-check-certificate -O kibana-$KIBANA.tar.gz https://download.elastic.co/kibana/kibana/kibana-$KIBANA.tar.gz \
   && tar -xzf kibana-$KIBANA.tar.gz \
   && mv kibana-$KIBANA /usr/share/kibana \
   && echo "Configure [Elasticsearch] ===================================================" \
@@ -47,7 +47,7 @@ RUN set -x \
   && chown -R elstack:elstack /usr/share/kibana \
   && echo "Clean Up..." \
   && rm -rf /tmp/* \
-  && apk del --purge .build-deps ca-certificates tar wget
+  && apk del .build-deps ca-certificates tar wget
 
 # Add custom supervisor config
 COPY config/supervisord/supervisord.conf /etc/supervisor/

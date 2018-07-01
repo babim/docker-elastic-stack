@@ -6,16 +6,16 @@ RUN set -x \
   && cd /tmp \
   && echo "Download Elastic Stack ======================================================" \
   && echo "Download Elasticsearch..." \
-  && wget -q --no-check-certificate -O elasticsearch-$STACK.tar.gz https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-$STACK.tar.gz \
+  && wget --no-check-certificate -O elasticsearch-$STACK.tar.gz https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-$STACK.tar.gz \
   && tar -xzf elasticsearch-$STACK.tar.gz \
   && mv elasticsearch-$STACK /usr/share/elasticsearch \
   && echo "Download Logstash..." \
-  && wget -q --no-check-certificate -O logstash-$STACK.tar.gz \
+  && wget --no-check-certificate -O logstash-$STACK.tar.gz \
     https://artifacts.elastic.co/downloads/logstash/logstash-$STACK.tar.gz \
   && tar -xzf logstash-$STACK.tar.gz \
   && mv logstash-$STACK /usr/share/logstash \
   && echo "Download Kibana..." \
-  && wget -q --no-check-certificate -O kibana-$STACK.tar.gz https://artifacts.elastic.co/downloads/kibana/kibana-$STACK-linux-x86_64.tar.gz \
+  && wget --no-check-certificate -O kibana-$STACK.tar.gz https://artifacts.elastic.co/downloads/kibana/kibana-$STACK-linux-x86_64.tar.gz \
   && tar -xzf kibana-$STACK.tar.gz \
   && mv kibana-$STACK-linux-x86_64 /usr/share/kibana \
   && echo "Configure [Elasticsearch] ===================================================" \
@@ -49,4 +49,4 @@ RUN set -x \
   && chown -R elstack:elstack /usr/share/kibana \
   && echo "Clean Up..." \
   && rm -rf /tmp/* \
-  && apk del --purge .build-deps ca-certificates tar wget
+  && apk del .build-deps ca-certificates tar wget
