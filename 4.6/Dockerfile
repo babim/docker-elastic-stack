@@ -50,4 +50,4 @@ RUN set -x \
   && chown -R elstack:elstack /usr/share/kibana \
   && echo "Clean Up..." \
   && rm -rf /tmp/* \
-  && apk del .build-deps ca-certificates tar wget
+  && apk del .build-deps wget
