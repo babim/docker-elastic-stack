@@ -53,4 +53,12 @@ RUN set -x \
 # Add custom supervisor config
 COPY config/supervisord/supervisord.conf /etc/supervisor/
 
+ENV PATH /usr/share/elasticsearch/bin:$PATH
+ENV PATH /usr/share/logstash/bin:$PATH
+ENV PATH /usr/share/kibana/bin:$PATH
+ENV JAVA_HOME /usr/lib/jvm/java-1.8-openjdk
+
+# fixes mktemp issue in alpine
+ENV ES_TMPDIR /usr/share/elasticsearch/tmp
+
 VOLUME ["/usr/share/kibana/app/dashboards"]

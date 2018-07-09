@@ -51,3 +51,14 @@ RUN set -x \
   && echo "Clean Up..." \
   && rm -rf /tmp/* \
   && apk del --purge wget ca-certificates gnupg openssl
+
+ENV PATH /usr/share/elasticsearch/bin:$PATH
+ENV PATH /usr/share/logstash/bin:$PATH
+ENV PATH /usr/share/kibana/bin:$PATH
+ENV JAVA_HOME /usr/lib/jvm/java-1.8-openjdk
+
+# fixes mktemp issue in alpine
+ENV ES_TMPDIR /usr/share/elasticsearch/tmp
+
+# necessary for 5.0+ (overriden via "--path.settings", ignored by < 5.0)
+ENV LS_SETTINGS_DIR /etc/logstash

@@ -18,6 +18,9 @@ ENV PATH /usr/share/logstash/bin:$PATH
 ENV PATH /usr/share/kibana/bin:$PATH
 ENV JAVA_HOME /usr/lib/jvm/java-1.8-openjdk
 
+# fixes mktemp issue in alpine
+ENV ES_TMPDIR /usr/share/elasticsearch/tmp
+
 # Add custom elasticsearch config
 COPY config/elastic /usr/share/elasticsearch/config
 COPY config/elastic/logrotate /etc/logrotate.d/elasticsearch
@@ -26,12 +29,6 @@ COPY config/elastic/logrotate /etc/logrotate.d/elasticsearch
 COPY config/logstash/conf.d/ /etc/logstash/conf.d/
 COPY config/logstash/patterns/ /opt/logstash/patterns/
 COPY config/logstash/logstash.yml /etc/logstash/
-
-# necessary for 5.0+ (overriden via "--path.settings", ignored by < 5.0)
-ENV LS_SETTINGS_DIR /etc/logstash
-
-# fixes mktemp issue in alpine
-ENV ES_TMPDIR /usr/share/elasticsearch/tmp
 
 # Add custom nginx config
 COPY config/nginx/nginx.conf /etc/nginx/nginx.conf
