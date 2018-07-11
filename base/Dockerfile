@@ -9,17 +9,12 @@ RUN apk add --no-cache openjdk8-jre tini su-exec
 RUN apk add --no-cache libzmq bash nodejs supervisor nginx apache2-utils openssl libc6-compat
 RUN mkdir -p /usr/local/lib \
 	&& ln -s /usr/lib/*/libzmq.so.3 /usr/local/lib/libzmq.so
-RUN apk add --no-cache wget ca-certificates gnupg \
-	&& echo "Create elstack user..." \
-	&& adduser -DH -s /sbin/nologin elstack
+RUN apk add --no-cache wget ca-certificates gnupg
 
 ENV PATH /usr/share/elasticsearch/bin:$PATH
 ENV PATH /usr/share/logstash/bin:$PATH
 ENV PATH /usr/share/kibana/bin:$PATH
 ENV JAVA_HOME /usr/lib/jvm/java-1.8-openjdk
-
-# fixes mktemp issue in alpine
-ENV ES_TMPDIR /usr/share/elasticsearch/tmp
 
 # Add custom elasticsearch config
 COPY config/elastic /usr/share/elasticsearch/config
@@ -43,11 +38,3 @@ COPY entrypoints/elastic-entrypoint.sh /
 COPY entrypoints/logstash-entrypoint.sh /
 COPY entrypoints/kibana-entrypoint.sh /
 COPY entrypoints/nginx-entrypoint.sh /
-
-VOLUME ["/usr/share/elasticsearch/data"]
-VOLUME ["/etc/logstash/conf.d"]
-VOLUME ["/etc/nginx"]
-
-EXPOSE 80 443 5601 9200 9300
-
-CMD ["/sbin/tini","--","/usr/bin/supervisord","-c", "/etc/supervisor/supervisord.conf"]

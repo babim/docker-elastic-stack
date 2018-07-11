@@ -2,6 +2,11 @@ FROM babim/elastic-stack:base
 
 ENV STACK 5.6.10
 
+# create user
+RUN echo "Create elstack user..." \
+    && adduser -DH -s /sbin/nologin elstack
+
+# install
 RUN set -x \
   && cd /tmp \
   && echo "Download Elastic Stack ======================================================" \
@@ -62,3 +67,12 @@ ENV ES_TMPDIR /usr/share/elasticsearch/tmp
 
 # necessary for 5.0+ (overriden via "--path.settings", ignored by < 5.0)
 ENV LS_SETTINGS_DIR /etc/logstash
+
+VOLUME ["/usr/share/kibana/app/dashboards"]
+VOLUME ["/usr/share/elasticsearch/data"]
+VOLUME ["/etc/logstash/conf.d"]
+VOLUME ["/etc/nginx"]
+
+EXPOSE 80 443 5601 9200 9300
+
+CMD ["/sbin/tini","--","/usr/bin/supervisord","-c", "/etc/supervisor/supervisord.conf"]

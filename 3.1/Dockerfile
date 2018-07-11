@@ -6,6 +6,11 @@ ENV ELASTIC 2.4.2
 ENV LOGSTASH 2.4.1
 ENV KIBANA 3.1.3
 
+# create user
+RUN echo "Create elstack user..." \
+    && adduser -DH -s /sbin/nologin elstack
+
+# install
 RUN set -x \
   && cd /tmp \
   && echo "Download Elastic Stack ======================================================" \
@@ -62,3 +67,10 @@ ENV JAVA_HOME /usr/lib/jvm/java-1.8-openjdk
 ENV ES_TMPDIR /usr/share/elasticsearch/tmp
 
 VOLUME ["/usr/share/kibana/app/dashboards"]
+VOLUME ["/usr/share/elasticsearch/data"]
+VOLUME ["/etc/logstash/conf.d"]
+VOLUME ["/etc/nginx"]
+
+EXPOSE 80 443 5601 9200 9300
+
+CMD ["/sbin/tini","--","/usr/bin/supervisord","-c", "/etc/supervisor/supervisord.conf"]
