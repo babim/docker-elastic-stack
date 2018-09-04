@@ -1,62 +1,17 @@
 FROM babim/elastic-stack:base
 
-ENV ELASTIC 2.4.4
-ENV LOGSTASH 2.4.1
-ENV KIBANA 4.6.4
-
-# create user
-RUN echo "Create elstack user..." \
-    && adduser -DH -s /sbin/nologin elstack
+ENV ES_VERSION 2.4.4
+ENV LS_VERSION 2.4.1
+ENV KB_VERSION 4.6.4
+ENV STACK_NEW false
+ENV ES_DOWNLOAD_URL "https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/$ES_VERSION"
+ENV LS_DOWNLOAD_URL "https://download.elastic.co/logstash/logstash"
+ENV KB_DOWNLOAD_URL "https://download.elastic.co/kibana/kibana"
 
 # install
-RUN set -x \
-  && cd /tmp \
-  && echo "Download Elastic Stack ======================================================" \
-  && echo "Download Elasticsearch..." \
-  && wget --no-check-certificate --progress=bar:force -O elasticsearch-$ELASTIC.tar.gz https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/$ELASTIC/elasticsearch-$ELASTIC.tar.gz \
-  && tar -xzf elasticsearch-$ELASTIC.tar.gz \
-  && mv elasticsearch-$ELASTIC /usr/share/elasticsearch \
-  && echo "Download Logstash..." \
-  && wget --no-check-certificate --progress=bar:force -O logstash-$LOGSTASH.tar.gz \
-    https://download.elastic.co/logstash/logstash/logstash-$LOGSTASH.tar.gz \
-  && tar -xzf logstash-$LOGSTASH.tar.gz \
-  && mv logstash-$LOGSTASH /usr/share/logstash \
-  && echo "Download Kibana..." \
-  && wget --no-check-certificate --progress=bar:force -O kibana-$KIBANA.tar.gz https://download.elastic.co/kibana/kibana/kibana-$KIBANA-linux-x86_64.tar.gz \
-  && tar -xzf kibana-$KIBANA.tar.gz \
-  && mv kibana-$KIBANA-linux-x86_64 /usr/share/kibana \
-  && echo "Configure [Elasticsearch] ===================================================" \
-  && for path in \
-  	/usr/share/elasticsearch/data \
-  	/usr/share/elasticsearch/logs \
-  	/usr/share/elasticsearch/config \
-  	/usr/share/elasticsearch/config/scripts \
-  	/usr/share/elasticsearch/plugins \
-	/usr/share/elasticsearch/tmp \
-  ; do \
-  mkdir -p "$path"; \
-  done \
-  && echo "Configure [Logstash] ========================================================" \
-  && if [ -f "$LS_SETTINGS_DIR/logstash.yml" ]; then \
-  		sed -ri 's!^(path.log|path.config):!#&!g' "$LS_SETTINGS_DIR/logstash.yml"; \
-  	fi \
-  && echo "Configure [Kibana] ==========================================================" \
-  # the default "server.host" is "localhost" in 5+
-  && sed -ri "s!^(\#\s*)?(server\.host:).*!\2 '0.0.0.0'!" /usr/share/kibana/config/kibana.yml \
-  && grep -q "^server\.host: '0.0.0.0'\$" /usr/share/kibana/config/kibana.yml \
-  # usr alpine nodejs and not bundled version
-  && bundled='NODE="${DIR}/node/bin/node"' \
-  && apline_node='NODE="/usr/bin/node"' \
-  && sed -i "s|$bundled|$apline_node|g" /usr/share/kibana/bin/kibana \
-  && rm -rf /usr/share/kibana/node \
-  && echo "Make Ngins SSL directory..." \
-  && mkdir -p /etc/nginx/ssl \
-  && chown -R elstack:elstack /usr/share/elasticsearch \
-  && chown -R elstack:elstack /usr/share/logstash \
-  && chown -R elstack:elstack /usr/share/kibana \
-  && echo "Clean Up..." \
-  && rm -rf /tmp/* \
-  && apk del --purge wget ca-certificates gnupg openssl
+RUN curl -s https://raw.githubusercontent.com/babim/docker-tag-options/master/z%20ElasticStack%20install/stack_install.sh | bash
+# remove packages
+RUN curl -s https://raw.githubusercontent.com/babim/docker-tag-options/master/z%20ElasticStack%20install/stack_clean.sh | bash
 
 ENV PATH /usr/share/elasticsearch/bin:$PATH
 ENV PATH /usr/share/logstash/bin:$PATH

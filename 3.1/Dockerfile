@@ -2,61 +2,18 @@ FROM babim/elastic-stack:base
 
 # ENV ELASTIC 1.7.6
 # ENV LOGSTASH 1.5.6
-ENV ELASTIC 2.4.2
-ENV LOGSTASH 2.4.1
-ENV KIBANA 3.1.3
-
-# create user
-RUN echo "Create elstack user..." \
-    && adduser -DH -s /sbin/nologin elstack
+ENV ES_VERSION 2.4.2
+ENV LS_VERSION 2.4.1
+ENV KB_VERSION 3.1.3
+ENV STACK_NEW false
+ENV ES_DOWNLOAD_URL "https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/$ES_VERSION"
+ENV LS_DOWNLOAD_URL "https://download.elastic.co/logstash/logstash"
+ENV KB_DOWNLOAD_URL "https://download.elastic.co/kibana/kibana"
 
 # install
-RUN set -x \
-  && cd /tmp \
-  && echo "Download Elastic Stack ======================================================" \
-  && echo "Download Elasticsearch..." \
-  && wget --no-check-certificate --progress=bar:force -O elasticsearch-$ELASTIC.tar.gz https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/$ELASTIC/elasticsearch-$ELASTIC.tar.gz \
-  && tar -xzf elasticsearch-$ELASTIC.tar.gz \
-  && mv elasticsearch-$ELASTIC /usr/share/elasticsearch \
-  && echo "Download Logstash..." \
-  && wget --no-check-certificate --progress=bar:force -O logstash-$LOGSTASH.tar.gz \
-    https://download.elastic.co/logstash/logstash/logstash-$LOGSTASH.tar.gz \
-  && tar -xzf logstash-$LOGSTASH.tar.gz \
-  && mv logstash-$LOGSTASH /usr/share/logstash \
-  && echo "Download Kibana..." \
-  && wget --no-check-certificate --progress=bar:force -O kibana-$KIBANA.tar.gz https://download.elastic.co/kibana/kibana/kibana-$KIBANA.tar.gz \
-  && tar -xzf kibana-$KIBANA.tar.gz \
-  && mv kibana-$KIBANA /usr/share/kibana \
-  && echo "Configure [Elasticsearch] ===================================================" \
-  && for path in \
-  	/usr/share/elasticsearch/data \
-  	/usr/share/elasticsearch/logs \
-  	/usr/share/elasticsearch/config \
-  	/usr/share/elasticsearch/config/scripts \
-  	/usr/share/elasticsearch/plugins \
-	/usr/share/elasticsearch/tmp \
-  ; do \
-  mkdir -p "$path"; \
-  done \
-  && echo "Configure [Logstash] ========================================================" \
-  && if [ -f "$LS_SETTINGS_DIR/logstash.yml" ]; then \
-  		sed -ri 's!^(path.log|path.config):!#&!g' "$LS_SETTINGS_DIR/logstash.yml"; \
-  	fi \
-  && echo "Configure [Kibana] ==========================================================" \
-  && mkdir -p /var/www \
-  && ln -s /usr/share/kibana /var/www/kibana \
-  && ls -lah /var/www/kibana \
-  && ls -lah /usr/share/kibana \
-  && sed -i 's/9200"/"+ window.location.port/g' /var/www/kibana/config.js \
-  && chown -R elstack:elstack /usr/share/elasticsearch \
-  && chown -R elstack:elstack /usr/share/logstash \
-  && chown -R elstack:elstack /usr/share/kibana \
-  && echo "Clean Up..." \
-  && rm -rf /tmp/* \
-  && apk del --purge wget ca-certificates gnupg openssl
-
-# Add custom supervisor config
-COPY config/supervisord/supervisord.conf /etc/supervisor/
+RUN curl -s https://raw.githubusercontent.com/babim/docker-tag-options/master/z%20ElasticStack%20install/stack_install.sh | bash
+# remove packages
+RUN curl -s https://raw.githubusercontent.com/babim/docker-tag-options/master/z%20ElasticStack%20install/stack_clean.sh | bash
 
 ENV PATH /usr/share/elasticsearch/bin:$PATH
 ENV PATH /usr/share/logstash/bin:$PATH
