@@ -7,9 +7,9 @@ ENV LS_DOWNLOAD_URL "https://artifacts.elastic.co/downloads/logstash"
 ENV KB_DOWNLOAD_URL "https://artifacts.elastic.co/downloads/kibana"
 
 # install
-RUN curl -s https://raw.githubusercontent.com/babim/docker-tag-options/master/z%20ElasticStack%20install/stack_install.sh | bash
+RUN wget -O - https://raw.githubusercontent.com/babim/docker-tag-options/master/z%20ElasticStack%20install/stack_install.sh | bash
 # remove packages
-RUN curl -s https://raw.githubusercontent.com/babim/docker-tag-options/master/z%20ElasticStack%20install/stack_clean.sh | bash
+RUN wget -O - https://raw.githubusercontent.com/babim/docker-tag-options/master/z%20ElasticStack%20install/stack_clean.sh | bash
 
 ENV PATH /usr/share/elasticsearch/bin:$PATH
 ENV PATH /usr/share/logstash/bin:$PATH
