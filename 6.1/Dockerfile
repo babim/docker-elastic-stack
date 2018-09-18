@@ -8,8 +8,6 @@ ENV KB_DOWNLOAD_URL "https://artifacts.elastic.co/downloads/kibana"
 
 # install
 RUN wget --no-check-certificate -O - https://raw.githubusercontent.com/babim/docker-tag-options/master/z%20ElasticStack%20install/stack_install.sh | bash
-# remove packages
-RUN wget --no-check-certificate -O - https://raw.githubusercontent.com/babim/docker-tag-options/master/z%20ElasticStack%20install/stack_clean.sh | bash
 
 ENV PATH /usr/share/elasticsearch/bin:$PATH
 ENV PATH /usr/share/logstash/bin:$PATH
@@ -25,5 +23,3 @@ VOLUME ["/etc/logstash/conf.d"]
 VOLUME ["/etc/nginx"]
 
 EXPOSE 80 443 5601 9200 9300
-
-CMD ["/sbin/tini","--","/usr/bin/supervisord","-c", "/etc/supervisor/supervisord.conf"]
