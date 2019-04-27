@@ -1,6 +1,6 @@
 FROM babim/elastic-stack:base
 
-ENV STACK 7.0.0
+ENV STACK 6.7.1
 ENV STACK_NEW true
 ENV ES_DOWNLOAD_URL "https://artifacts.elastic.co/downloads/elasticsearch"
 ENV LS_DOWNLOAD_URL "https://artifacts.elastic.co/downloads/logstash"
