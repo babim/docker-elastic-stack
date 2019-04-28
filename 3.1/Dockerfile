@@ -9,9 +9,10 @@ ENV STACK_NEW false
 ENV ES_DOWNLOAD_URL "https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/$ES_VERSION"
 ENV LS_DOWNLOAD_URL "https://download.elastic.co/logstash/logstash"
 ENV KB_DOWNLOAD_URL "https://download.elastic.co/kibana/kibana"
+ENV SOFT stack
 
 # install
-RUN wget --no-check-certificate -O - https://raw.githubusercontent.com/babim/docker-tag-options/master/z%20ElasticStack%20install/stack_install.sh | bash
+RUN curl -s https://raw.githubusercontent.com/babim/docker-tag-options/master/z%20ElasticStack%20install/${SOFT}_install.sh | bash
 
 ENV PATH /usr/share/elasticsearch/bin:$PATH
 ENV PATH /usr/share/logstash/bin:$PATH
