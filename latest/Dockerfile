@@ -7,6 +7,7 @@ ENV ES_DOWNLOAD_URL "https://artifacts.elastic.co/downloads/elasticsearch"
 ENV LS_DOWNLOAD_URL "https://artifacts.elastic.co/downloads/logstash"
 ENV KB_DOWNLOAD_URL "https://artifacts.elastic.co/downloads/kibana"
 ENV ES_TARBAL "${ES_DOWNLOAD_URL}/elasticsearch-oss-${STACK}-linux-${BIT}.tar.gz"
+ENV LS_TARBAL "${LS_DOWNLOAD_URL}/logstash-oss-${STACK}.tar.gz"
 ENV KB_TARBAL "${KB_DOWNLOAD_URL}/kibana-oss-${STACK}-linux-${BIT}.tar.gz"
 ENV SOFT stack
 
